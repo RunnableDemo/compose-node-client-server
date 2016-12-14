@@ -1,0 +1,32 @@
+version: '2'
+services:
+  server:
+    build: .
+    ports:
+      - "7000:7000"
+    links:
+      - 'rethinkdb'
+    environment:
+      - RETHINKDB=rethinkdb
+      - PORT=7000
+      - REDIS_HOST=redis
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile_client
+    ports:
+      - "7001:7001"
+    links:
+      - 'rethinkdb'
+    environment:
+      - SERVER_HOST=server
+      - PORT=7001
+      - REDIS_HOST=redis
+  rethinkdb:
+    image: rethinkdb
+    ports:
+        - "8080"
+        - "28015"
+        - "29015"
+  redis:
+    image: "redis"

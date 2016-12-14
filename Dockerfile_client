@@ -1,0 +1,14 @@
+FROM node:latest
+
+ENV IS_MIRRORED_DOCKERFILE 1
+COPY ["./package.json", "/app/"]
+WORKDIR /app
+RUN npm install # runnable-cache
+
+COPY ["./", "/app/"]
+
+# Open up ports on the container
+EXPOSE 7001
+
+# Command to start the app
+CMD npm run start-client
