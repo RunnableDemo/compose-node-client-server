@@ -75,6 +75,25 @@ app.get('/', function (req, res) {
     })
 })
 
+app.get('/status', function (req, res) {
+  const redisClient = redis.createClient({
+    host: process.env.REDIS_HOST
+  })
+  redisClient.incrAsync('hits')
+  .then((hits) => {
+    return res.json({
+      status: 'ok',
+      hits: hits
+    })
+  })
+  .catch((err) => {
+    return res.json({
+      status: 'error',
+      message: err.message
+    })
+  })
+})
+
 app.listen(port, function () {
   console.log(`Server running at http://127.0.0.1:${port}/`)
 })
